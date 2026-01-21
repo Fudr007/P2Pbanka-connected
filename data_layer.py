@@ -4,10 +4,8 @@ class DataLayerError(Exception):
     pass
 
 class DataLayer:
-    def __init__(self, connection, log_path):
-        log_path = None
+    def __init__(self, connection):
         self.connection = connection
-        self.log_path = log_path
 
     def bank_code(self):
         try:

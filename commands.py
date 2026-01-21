@@ -6,9 +6,9 @@ class CommandError(Exception):
     pass
 
 class Command(ABC):
-    def __init__(self, command_line: str, connection, log):
+    def __init__(self, command_line: str, connection):
         self.command_line = command_line
-        self.data_layer = DataLayer(connection, log)
+        self.data_layer = DataLayer(connection)
 
     @abstractmethod
     def execute(self) -> str:

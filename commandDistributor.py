@@ -13,7 +13,7 @@ class CommandDistribution:
             "BN": BNCommand,
         }
 
-    def distribute(self, line: bytes, connection, log):
+    def distribute(self, line: bytes, connection):
         try:
             code = line[:2]
             code = code.decode("utf-8").upper()
@@ -21,7 +21,7 @@ class CommandDistribution:
             content = content.decode("utf-8").strip()
 
             if code in self.commands:
-                return self.commands[code](content, connection, log).execute()
+                return self.commands[code](content, connection).execute()
 
             return "ER Unknown command"
         except CommandError as e:
