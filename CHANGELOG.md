@@ -8,3 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ## 21-01-2026 - Petr Valenta
 * Safe multiprocess logging to file
+
+## 23-01-2026 - Petr Valenta
+* Added save server shutdown
+* Added commands proxy
