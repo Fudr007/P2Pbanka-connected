@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+
+from commands_proxy import proxy
 from data_layer import DataLayer, DataLayerError
 
 
@@ -32,12 +34,13 @@ class ADCommand(Command):
             if bank_code == self.data_layer.bank_code():
                 answer = self.data_layer.deposit(acc_number, deposit_amount)
             else:
-                answer = False
+                reline = f"AD {acc_number}/{bank_code} {deposit_amount}"
+                answer = proxy(bank_code, reline)
 
             if answer:
                 return "AD"
             else:
-                return "ER deposit failed"
+                raise CommandError(f"ER {answer}")
         except DataLayerError as e:
             raise CommandError(e)
         except Exception as e:
@@ -53,12 +56,13 @@ class AWCommand(Command):
             if bank_code == self.data_layer.bank_code():
                 answer = self.data_layer.withdraw(acc_number, withdraw_amount)
             else:
-                answer = False
+                reline = f"AD {acc_number}/{bank_code} {withdraw_amount}"
+                answer = proxy(bank_code, reline)
 
             if answer:
                 return "AW"
             else:
-                return "ER withdraw failed"
+                raise CommandError(f"ER {answer}")
         except DataLayerError as e:
             raise CommandError(e)
         except Exception as e:
@@ -73,12 +77,13 @@ class ABCommand(Command):
             if bank_code == self.data_layer.bank_code():
                 answer = self.data_layer.balance(acc_number)
             else:
-                answer = False
+                reline = f"AD {acc_number}/{bank_code}"
+                answer = proxy(bank_code, reline)
 
             if type(answer) == int:
                 return f"AB {answer}"
             else:
-                return "ER account balance failed"
+                raise CommandError(f"ER {answer}")
         except DataLayerError as e:
             raise CommandError(e)
         except Exception as e:
@@ -93,12 +98,13 @@ class ARCommand(Command):
             if bank_code == self.data_layer.bank_code():
                 answer = self.data_layer.delete_account(acc_number)
             else:
-                answer = False
+                reline = f"AD {acc_number}/{bank_code}"
+                answer = proxy(bank_code, reline)
 
             if answer:
                 return "AR"
             else:
-                return "ER account deletion failed"
+                raise CommandError(f"ER {answer}")
         except DataLayerError as e:
             raise CommandError(e)
         except Exception as e:
