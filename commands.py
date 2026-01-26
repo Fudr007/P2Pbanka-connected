@@ -56,7 +56,7 @@ class AWCommand(Command):
             if bank_code == self.data_layer.bank_code():
                 answer = self.data_layer.withdraw(acc_number, withdraw_amount)
             else:
-                reline = f"AD {acc_number}/{bank_code} {withdraw_amount}"
+                reline = f"AW {acc_number}/{bank_code} {withdraw_amount}"
                 answer = proxy(bank_code, reline)
 
             if answer:
@@ -77,7 +77,7 @@ class ABCommand(Command):
             if bank_code == self.data_layer.bank_code():
                 answer = self.data_layer.balance(acc_number)
             else:
-                reline = f"AD {acc_number}/{bank_code}"
+                reline = f"AB {acc_number}/{bank_code}"
                 answer = proxy(bank_code, reline)
 
             if type(answer) == int:
@@ -98,7 +98,7 @@ class ARCommand(Command):
             if bank_code == self.data_layer.bank_code():
                 answer = self.data_layer.delete_account(acc_number)
             else:
-                reline = f"AD {acc_number}/{bank_code}"
+                reline = f"AR {acc_number}/{bank_code}"
                 answer = proxy(bank_code, reline)
 
             if answer:

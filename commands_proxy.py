@@ -18,12 +18,23 @@ def proxy(ip, command):
             data = client_socket.recv(1024)
             data = data.replace(b"\n", b"")
             data = data.replace(b"\r\n", b"")
-            if data.decode('utf-8') == str(code_cmd):
-                return True
-            elif data.decode('utf-8').split(" ")[0] == "ER":
-                return data.decode('utf-8')
+            data = data.decode('utf-8').strip()
+            data = data.split()
+            if str(code_cmd) == 'AB':
+                if data[0] == str(code_cmd):
+                    return int(data[1])
+                elif data[0] == "ER":
+                    return f"{data[0]} {data[1]}"
+                else:
+                    return False
             else:
-                return False
+                print(data)
+                if data[0] == str(code_cmd):
+                    return True
+                elif data[0] == "ER":
+                    return f"{data[0]} {data[1]}"
+                else:
+                    return False
         except ConnectionRefusedError:
             continue
         except socket.timeout:
