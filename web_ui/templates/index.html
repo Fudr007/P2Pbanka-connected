@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>P2P Bank Web UI</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <div class="title">P2P Bank Web UI</div>
+        <div class="subtitle">TCP klient pro tvůj server (bez změn na serveru)</div>
+      </div>
+      <div class="status">
+        <div><b>Host:</b> {{ state.host }}:{{ state.port }}</div>
+        <div><b>Timeout:</b> {{ state.timeout }}s</div>
+      </div>
+    </header>
+
+    {% if state.error %}
+      <div class="alert alert-error">{{ state.error }}</div>
+    {% endif %}
+
+    <div class="grid">
+      <section class="card">
+        <h2>1) Připojení / Nastavení</h2>
+        <form method="post" action="/connect" class="form">
+          <label>Host</label>
+          <input name="host" value="{{ state.host }}" />
+
+          <label>Port</label>
+          <input name="port" type="number" value="{{ state.port }}" />
+
+          <label>Timeout (s)</label>
+          <input name="timeout" type="number" value="{{ state.timeout }}" />
+
+          <button type="submit">Uložit + otestovat (BC)</button>
+        </form>
+        <p class="hint">Server musí běžet zvlášť (tak jak ho spouštíš teď).</p>
+      </section>
+
+      <section class="card">
+        <h2>2) Rychlé příkazy</h2>
+        <div class="btnrow">
+          <form method="post" action="/cmd/bc"><button>BC</button></form>
+          <form method="post" action="/cmd/ac"><button>AC</button></form>
+          <form method="post" action="/cmd/ba"><button>BA</button></form>
+          <form method="post" action="/cmd/bn"><button>BN</button></form>
+        </div>
+
+        <h3>Účetní operace</h3>
+
+        <form method="post" action="/cmd/ab" class="form-inline">
+          <input name="account_number" placeholder="account_number" />
+          <input name="bank_code" placeholder="bank_code (např. CZ01)" />
+          <button>Zůstatek (AB)</button>
+        </form>
+
+        <form method="post" action="/cmd/ad" class="form-inline">
+          <input name="account_number" placeholder="account_number" />
+          <input name="bank_code" placeholder="bank_code (např. CZ01)" />
+          <input name="amount" placeholder="amount" />
+          <button>Vklad (AD)</button>
+        </form>
+
+        <form method="post" action="/cmd/aw" class="form-inline">
+          <input name="account_number" placeholder="account_number" />
+          <input name="bank_code" placeholder="bank_code (např. CZ01)" />
+          <input name="amount" placeholder="amount" />
+          <button>Výběr (AW)</button>
+        </form>
+
+        <form method="post" action="/cmd/ar" class="form-inline">
+          <input name="account_number" placeholder="account_number" />
+          <input name="bank_code" placeholder="bank_code (např. CZ01)" />
+          <button>Smazat (AR)</button>
+        </form>
+      </section>
+
+      <section class="card wide">
+        <h2>3) Vlastní příkaz (pro debug)</h2>
+        <form method="post" action="/send" class="form-inline">
+          <input name="cmd" placeholder='např. "AB 12345/CZ01" nebo "BN"' style="flex:1" />
+          <button>Odeslat</button>
+        </form>
+
+        <div class="result">
+          <div><b>Last command:</b> {{ state.last_cmd }}</div>
+          <pre>{{ state.last_response }}</pre>
+        </div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
